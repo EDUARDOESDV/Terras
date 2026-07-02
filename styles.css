@@ -32,11 +32,12 @@ select {
 }
 
 .topbar {
-  align-items: end;
+  align-items: stretch;
   display: flex;
-  gap: 24px;
-  justify-content: space-between;
-  padding: 26px clamp(18px, 4vw, 56px) 16px;
+  flex-direction: column;
+  gap: 14px;
+  justify-content: flex-start;
+  padding: 16px 14px 10px;
 }
 
 .eyebrow {
@@ -55,7 +56,7 @@ p {
 }
 
 h1 {
-  font-size: clamp(2rem, 4.2vw, 4.2rem);
+  font-size: clamp(1.9rem, 8vw, 4.2rem);
   line-height: 0.98;
   margin-bottom: 10px;
   max-width: 900px;
@@ -69,7 +70,7 @@ h2 {
 
 .intro {
   color: var(--muted);
-  font-size: clamp(0.98rem, 1.4vw, 1.15rem);
+  font-size: clamp(0.95rem, 4.1vw, 1.15rem);
   line-height: 1.45;
   margin: 0;
   max-width: 620px;
@@ -86,13 +87,15 @@ button {
   display: inline-flex;
   font-weight: 800;
   justify-content: center;
-  min-height: 44px;
+  min-height: 48px;
   padding: 0 18px;
   text-decoration: none;
   transition:
     transform 160ms ease,
     background 160ms ease;
   white-space: nowrap;
+  touch-action: manipulation;
+  width: 100%;
 }
 
 .maps-link:hover,
@@ -103,14 +106,14 @@ button:hover {
 
 .shell {
   display: grid;
-  gap: 20px;
-  padding: 0 clamp(18px, 4vw, 56px) 48px;
+  gap: 14px;
+  padding: 0 14px 22px;
 }
 
 .summary {
   display: grid;
   gap: 10px;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: 1fr;
 }
 
 .summary article,
@@ -125,7 +128,7 @@ button:hover {
 
 .summary article {
   border-radius: 8px;
-  padding: 15px 16px;
+  padding: 14px 15px;
 }
 
 .summary span,
@@ -142,7 +145,7 @@ button:hover {
 
 .summary strong {
   display: block;
-  font-size: clamp(1.35rem, 2.6vw, 2.2rem);
+  font-size: clamp(1.25rem, 7vw, 2.2rem);
   line-height: 1.05;
   margin: 4px 0;
 }
@@ -155,8 +158,8 @@ button:hover {
 .workspace {
   align-items: start;
   display: grid;
-  gap: 16px;
-  grid-template-columns: minmax(310px, 380px) minmax(0, 1fr);
+  gap: 12px;
+  grid-template-columns: 1fr;
 }
 
 .tools,
@@ -166,10 +169,9 @@ button:hover {
 
 .tools {
   display: grid;
-  gap: 16px;
-  padding: 16px;
-  position: sticky;
-  top: 12px;
+  gap: 14px;
+  padding: 14px;
+  position: static;
 }
 
 .field {
@@ -192,14 +194,14 @@ label {
 .search-row {
   display: grid;
   gap: 8px;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: 1fr;
 }
 
 .min-area-row {
   align-items: center;
   display: grid;
   gap: 10px;
-  grid-template-columns: minmax(0, 1fr) 96px;
+  grid-template-columns: 1fr;
 }
 
 #minAreaRange {
@@ -218,7 +220,7 @@ select {
   border: 1px solid var(--line);
   border-radius: 8px;
   color: var(--ink);
-  min-height: 44px;
+  min-height: 48px;
   padding: 0 12px;
   width: 100%;
 }
@@ -234,7 +236,7 @@ select:focus {
   border-radius: 8px;
   display: grid;
   gap: 13px;
-  min-height: 262px;
+  min-height: 248px;
   padding: 15px;
 }
 
@@ -253,7 +255,7 @@ select:focus {
 .detail-grid {
   display: grid;
   gap: 8px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
 }
 
 .detail-grid div {
@@ -299,7 +301,7 @@ select:focus {
   color: #fff;
   display: block;
   font-weight: 900;
-  padding: 11px 14px;
+  padding: 13px 14px;
   text-align: center;
   text-decoration: none;
 }
@@ -338,16 +340,17 @@ select:focus {
 .map-header {
   align-items: center;
   display: flex;
-  gap: 18px;
-  justify-content: space-between;
-  padding: 16px 18px 12px;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: flex-start;
+  padding: 14px 14px 12px;
 }
 
 .legend {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .legend span {
@@ -387,16 +390,16 @@ select:focus {
     url("assets/referencia-satelite.jpg") center / cover;
   border-top: 1px solid var(--line);
   overflow: auto;
-  padding: 16px;
+  padding: 10px;
 }
 
 #lotMap {
   display: block;
   aspect-ratio: 503.6 / 182;
   height: auto;
-  max-height: 72vh;
-  min-height: 360px;
-  min-width: 820px;
+  max-height: 62vh;
+  min-height: 280px;
+  min-width: 0;
   width: 100%;
 }
 
@@ -481,9 +484,9 @@ select:focus {
 .references {
   border-radius: 8px;
   display: grid;
-  gap: 16px;
-  grid-template-columns: 0.9fr 1.25fr 0.85fr;
-  padding: 16px;
+  gap: 12px;
+  grid-template-columns: 1fr;
+  padding: 14px;
 }
 
 .reference-copy {
@@ -494,6 +497,11 @@ select:focus {
   color: var(--muted);
   line-height: 1.55;
   margin-bottom: 0;
+}
+
+.references figure:nth-of-type(1),
+.references figure:nth-of-type(2) {
+  width: 100%;
 }
 
 figure {
@@ -516,59 +524,108 @@ figcaption {
 }
 
 @media (max-width: 980px) {
-  .topbar,
-  .map-header {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
   .maps-link {
-    width: fit-content;
-  }
-
-  .summary,
-  .workspace,
-  .references {
-    grid-template-columns: 1fr;
-  }
-
-  .tools {
-    position: static;
-  }
-
-  #lotMap {
-    max-height: none;
+    width: 100%;
   }
 }
 
-@media (max-width: 620px) {
-  .topbar,
-  .shell {
-    padding-left: 14px;
-    padding-right: 14px;
+@media (min-width: 640px) {
+  .topbar {
+    padding: 22px 20px 12px;
   }
 
   .summary {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .search-row,
-  .min-area-row,
-  .detail-grid {
-    grid-template-columns: 1fr;
+  .shell {
+    padding: 0 20px 28px;
   }
 
-  .maps-link,
+  .references {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .search-row,
+  .min-area-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+}
+
+@media (min-width: 960px) {
+  .topbar {
+    align-items: end;
+    flex-direction: row;
+    gap: 24px;
+    justify-content: space-between;
+    padding: 26px clamp(18px, 4vw, 56px) 16px;
+  }
+
+  .maps-link {
+    width: fit-content;
+  }
+
   button {
-    width: 100%;
+    width: auto;
+  }
+
+  .shell {
+    padding: 0 clamp(18px, 4vw, 56px) 48px;
+    gap: 20px;
+  }
+
+  .summary {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .workspace {
+    gap: 16px;
+    grid-template-columns: minmax(310px, 380px) minmax(0, 1fr);
+  }
+
+  .tools {
+    position: sticky;
+    top: 12px;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .map-header {
+    align-items: center;
+    flex-direction: row;
+    gap: 18px;
+    justify-content: space-between;
+    padding: 16px 18px 12px;
+  }
+
+  .legend {
+    justify-content: flex-end;
   }
 
   .svg-wrap {
-    padding: 10px;
+    padding: 16px;
   }
 
   #lotMap {
-    min-height: 300px;
-    min-width: 760px;
+    max-height: 72vh;
+    min-height: 360px;
+  }
+
+  .references {
+    grid-template-columns: 0.9fr 1.25fr 0.85fr;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .detail-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .svg-wrap {
+    padding: 16px;
+  }
+
+  #lotMap {
+    min-width: 0;
   }
 }
