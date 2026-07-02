@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Mapa interativo de loteamento com 330 lotes clicaveis, medidas individuais e link direto para o Google Maps."
+      content="Mapa interativo de loteamento com area minima ajustavel, lotes clicaveis, medidas individuais e link direto para o Google Maps."
     />
     <title>Loteamento Interativo - 7 hectares</title>
     <link rel="stylesheet" href="styles.css" />
@@ -33,28 +33,46 @@
       <section class="summary" aria-label="Resumo da proposta">
         <article>
           <span>Area do terreno</span>
-          <strong>70.000 m2</strong>
+          <strong id="summaryTotalArea">70.000,4 m2</strong>
           <small>168 m frente, 110 m fundo, 503,6 m profundidade</small>
         </article>
         <article>
           <span>Ruas</span>
           <strong>3 x 10 m</strong>
-          <small>ruas longitudinais da frente ao fundo</small>
+          <small id="summaryRoadArea">area das ruas: 15.108 m2</small>
         </article>
         <article>
           <span>Lotes</span>
-          <strong>330</strong>
-          <small>6 fileiras com 55 lotes cada</small>
+          <strong id="summaryLotCount">300</strong>
+          <small id="summaryUsableArea">area util: 54.892,4 m2</small>
         </article>
         <article>
           <span>Frente do lote</span>
-          <strong>9,16 m</strong>
-          <small>profundidade ajustada ao trapezio</small>
+          <strong id="summaryFrontage">10,07 m</strong>
+          <small id="summaryMinArea">minimo: 180 m2</small>
         </article>
       </section>
 
       <section class="workspace">
         <aside class="tools" aria-label="Ferramentas do loteamento">
+          <div class="field">
+            <label for="minAreaInput">Area minima por lote</label>
+            <div class="min-area-row">
+              <input
+                id="minAreaRange"
+                type="range"
+                min="120"
+                max="600"
+                step="5"
+                value="180"
+              />
+              <input id="minAreaInput" type="number" min="120" max="600" step="5" value="180" />
+            </div>
+            <small class="field-help">
+              Quanto maior o minimo, menor a quantidade e maior a frente media.
+            </small>
+          </div>
+
           <div class="field">
             <label for="lotSearch">Lote</label>
             <div class="search-row">
@@ -81,9 +99,8 @@
           <div class="note">
             <strong>Metodo de divisao</strong>
             <p>
-              O terreno foi dividido em 6 faixas de lotes e 3 ruas de 10 m. Como a frente e mais
-              larga que o fundo, a profundidade de cada lote varia por posicao para aproveitar a
-              area sem sobras no desenho.
+              A malha usa as 3 ruas de 10 m e recalcula a quantidade de lotes para preencher toda
+              a area util. Quando o minimo sobe, a quantidade cai e a frente media cresce.
             </p>
           </div>
         </aside>

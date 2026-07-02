@@ -5,24 +5,72 @@ const land = {
   roads: 3,
   roadWidth: 10,
   rows: 6,
-  columns: 55,
   centerLat: -9.981726,
   centerLng: -67.8869668,
 };
+
+land.totalArea = ((land.backWidth + land.frontWidth) / 2) * land.length;
+land.roadArea = land.roads * land.roadWidth * land.length;
+land.usableArea = land.totalArea - land.roadArea;
 
 const svg = document.querySelector("#lotMap");
 const details = document.querySelector("#lotDetails");
 const searchInput = document.querySelector("#lotSearch");
 const searchButton = document.querySelector("#searchButton");
 const rowFilter = document.querySelector("#rowFilter");
+const minAreaInput = document.querySelector("#minAreaInput");
+const minAreaRange = document.querySelector("#minAreaRange");
+
+const summaryTotalArea = document.querySelector("#summaryTotalArea");
+const summaryRoadArea = document.querySelector("#summaryRoadArea");
+const summaryLotCount = document.querySelector("#summaryLotCount");
+const summaryUsableArea = document.querySelector("#summaryUsableArea");
+const summaryFrontage = document.querySelector("#summaryFrontage");
+const summaryMinArea = document.querySelector("#summaryMinArea");
 
 const lots = [];
 let selectedLot = null;
+let layout = null;
 
 const fmt = new Intl.NumberFormat("pt-BR", {
   maximumFractionDigits: 2,
   minimumFractionDigits: 0,
 });
+
+function formatNumber(value, digits) {
+  return new Intl.NumberFormat("pt-BR", {
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  }).format(value);
+}
+
+function formatArea(value) {
+  return formatNumber(value, 1);
+}
+
+function formatMeters(value) {
+  return formatNumber(value, 2);
+}
+
+function formatAreaSmart(value) {
+  return Number.isInteger(value) ? formatNumber(value, 0) : formatArea(value);
+}
+
+function computeLayout(minArea) {
+  const target = Number(minArea);
+  const columns = Math.max(1, Math.floor(land.usableArea / (land.rows * target)));
+  const totalLots = land.rows * columns;
+  const averageArea = land.usableArea / totalLots;
+  const averageFrontage = land.length / columns;
+
+  return {
+    minArea: target,
+    columns,
+    totalLots,
+    averageArea,
+    averageFrontage,
+  };
+}
 
 function widthAt(x) {
   return land.backWidth + ((land.frontWidth - land.backWidth) * x) / land.length;
@@ -59,7 +107,7 @@ function polygonPoints(points) {
   return points.map(([x, y]) => `${sx(x).toFixed(2)},${sy(y).toFixed(2)}`).join(" ");
 }
 
-function areaForLot(row, x0, x1) {
+function areaForLot(x0, x1) {
   const h0 = rowHeightAt(x0);
   const h1 = rowHeightAt(x1);
   return ((h0 + h1) / 2) * (x1 - x0);
@@ -90,12 +138,29 @@ function createSvgElement(name, attrs = {}) {
   return element;
 }
 
+function syncMinArea(value) {
+  const normalized = String(Math.max(120, Math.min(600, Number(value))));
+  minAreaInput.value = normalized;
+  minAreaRange.value = normalized;
+  return Number(normalized);
+}
+
+function updateSummary() {
+  summaryTotalArea.textContent = `${formatArea(land.totalArea)} m2`;
+  summaryRoadArea.textContent = `area das ruas: ${formatAreaSmart(land.roadArea)} m2`;
+  summaryLotCount.textContent = String(layout.totalLots);
+  summaryUsableArea.textContent = `area util: ${formatArea(land.usableArea)} m2`;
+  summaryFrontage.textContent = `${formatMeters(layout.averageFrontage)} m`;
+  summaryMinArea.textContent = `minimo: ${formatAreaSmart(layout.minArea)} m2 | media: ${formatArea(layout.averageArea)} m2`;
+}
+
 function buildLots() {
-  const lotWidth = land.length / land.columns;
+  lots.length = 0;
+  const lotWidth = land.length / layout.columns;
   let number = 1;
 
   for (let row = 1; row <= land.rows; row += 1) {
-    for (let col = 1; col <= land.columns; col += 1) {
+    for (let col = 1; col <= layout.columns; col += 1) {
       const x0 = (col - 1) * lotWidth;
       const x1 = col * lotWidth;
       const y0x0 = yFor(row, "bottom", x0);
@@ -119,7 +184,7 @@ function buildLots() {
         depthStart: y1x0 - y0x0,
         depthEnd: y1x1 - y0x1,
         depthAvg: rowHeightAt(centerX),
-        area: areaForLot(row, x0, x1),
+        area: areaForLot(x0, x1),
         lat: coords.lat,
         lng: coords.lng,
         points: [
@@ -137,6 +202,7 @@ function buildLots() {
 
 function drawBaseMap() {
   svg.setAttribute("viewBox", `-14 -16 ${land.length + 28} ${land.frontWidth + 34}`);
+  svg.setAttribute("aria-label", `Mapa interativo com ${layout.totalLots} lotes`);
   svg.innerHTML = "";
 
   const defs = createSvgElement("defs");
@@ -260,22 +326,23 @@ function renderDetails(lot) {
     <div>
       <small>Lote selecionado</small>
       <h3>${lot.id} <span class="lot-number">#${lot.number}</span></h3>
+      <small>Malha atual: ${layout.totalLots} lotes | media: ${formatArea(layout.averageArea)} m2</small>
     </div>
     <div class="detail-grid">
       <div><span>Fileira</span><strong>${lot.row}</strong></div>
-      <div><span>Posicao</span><strong>${lot.col}/${land.columns}</strong></div>
-      <div class="metric-primary"><span>Frente</span><strong>${fmt.format(lot.lotWidth)} m</strong></div>
-      <div class="metric-primary"><span>Prof. media</span><strong>${fmt.format(lot.depthAvg)} m</strong></div>
-      <div><span>Profundidade no inicio</span><strong>${fmt.format(lot.depthStart)} m</strong></div>
-      <div><span>Profundidade no fim</span><strong>${fmt.format(lot.depthEnd)} m</strong></div>
-      <div class="metric-primary"><span>Area estimada</span><strong>${fmt.format(lot.area)} m2</strong></div>
+      <div><span>Posicao</span><strong>${lot.col}/${layout.columns}</strong></div>
+      <div class="metric-primary"><span>Frente</span><strong>${formatMeters(lot.lotWidth)} m</strong></div>
+      <div class="metric-primary"><span>Prof. media</span><strong>${formatMeters(lot.depthAvg)} m</strong></div>
+      <div><span>Profundidade no inicio</span><strong>${formatMeters(lot.depthStart)} m</strong></div>
+      <div><span>Profundidade no fim</span><strong>${formatMeters(lot.depthEnd)} m</strong></div>
+      <div class="metric-primary"><span>Area estimada</span><strong>${formatArea(lot.area)} m2</strong></div>
       <div><span>Coordenada</span><strong>${lot.lat.toFixed(5)}, ${lot.lng.toFixed(5)}</strong></div>
     </div>
     <div class="detail-actions">
       <a href="${maps}" target="_blank" rel="noreferrer">Ver este lote no Google Maps</a>
       <a href="${directions}" target="_blank" rel="noreferrer">Tracar rota ate o lote</a>
     </div>
-    <small>Coordenada aproximada para demonstracao, calculada a partir do centro do terreno informado.</small>
+    <small>A frente cresce quando o minimo sobe. A area total continua sendo preenchida sem sobras.</small>
   `;
 }
 
@@ -304,12 +371,28 @@ function normalizeSearch(value) {
   return clean;
 }
 
+function rebuildLayout(minArea, keepSelection = true) {
+  const previousId = keepSelection ? selectedLot?.id : null;
+  layout = computeLayout(minArea);
+  updateSummary();
+  buildLots();
+  drawBaseMap();
+  drawLots();
+  updateLotClasses();
+
+  const nextId = previousId && lots.some((lot) => lot.id === previousId) ? previousId : "F1-01";
+  selectLot(nextId);
+}
+
 function runSearch() {
   const value = normalizeSearch(searchInput.value);
   selectLot(value);
 }
 
 function init() {
+  const minArea = syncMinArea(minAreaInput.value);
+  layout = computeLayout(minArea);
+  updateSummary();
   buildLots();
   drawBaseMap();
   drawLots();
@@ -319,7 +402,16 @@ function init() {
   searchInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter") runSearch();
   });
+
   rowFilter.addEventListener("change", updateLotClasses);
+
+  const onMinAreaChange = (value) => {
+    const nextValue = syncMinArea(value);
+    rebuildLayout(nextValue);
+  };
+
+  minAreaInput.addEventListener("input", (event) => onMinAreaChange(event.target.value));
+  minAreaRange.addEventListener("input", (event) => onMinAreaChange(event.target.value));
 }
 
 init();

@@ -177,6 +177,12 @@ button:hover {
   gap: 8px;
 }
 
+.field-help {
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+
 label {
   color: #27352d;
   font-size: 0.8rem;
@@ -187,6 +193,23 @@ label {
   display: grid;
   gap: 8px;
   grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.min-area-row {
+  align-items: center;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: minmax(0, 1fr) 96px;
+}
+
+#minAreaRange {
+  accent-color: var(--green);
+  min-height: 38px;
+  padding: 0;
+}
+
+#minAreaInput {
+  text-align: right;
 }
 
 input,
@@ -211,7 +234,7 @@ select:focus {
   border-radius: 8px;
   display: grid;
   gap: 13px;
-  min-height: 250px;
+  min-height: 262px;
   padding: 15px;
 }
 
@@ -530,6 +553,7 @@ figcaption {
   }
 
   .search-row,
+  .min-area-row,
   .detail-grid {
     grid-template-columns: 1fr;
   }
