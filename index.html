@@ -106,15 +106,42 @@
         </aside>
 
         <section class="map-panel" aria-label="Mapa interativo dos lotes">
+          <div class="mobile-stats" aria-label="Resumo rapido no mobile">
+            <article>
+              <span>Total do terreno</span>
+              <strong id="mobileTotalArea">70.000,4 m²</strong>
+            </article>
+            <article>
+              <span>m² por lote</span>
+              <strong id="mobileLotArea">183,0 m²</strong>
+            </article>
+          </div>
+
           <div class="map-header">
             <div>
               <p class="eyebrow">Mapa tecnico</p>
               <h2>Lotes clicaveis com medidas individuais</h2>
             </div>
-            <div class="legend" aria-label="Legenda">
-              <span><i class="lot-key"></i>Lote</span>
-              <span><i class="road-key"></i>Rua 10 m</span>
-              <span><i class="selected-key"></i>Selecionado</span>
+            <div class="header-tools">
+              <div class="legend" aria-label="Legenda">
+                <span><i class="lot-key"></i>Lote</span>
+                <span><i class="road-key"></i>Rua 10 m</span>
+                <span><i class="selected-key"></i>Selecionado</span>
+              </div>
+              <div class="zoombar" aria-label="Controles de zoom">
+                <button id="zoomOut" type="button" aria-label="Reduzir zoom">-</button>
+                <input
+                  id="zoomRange"
+                  type="range"
+                  min="70"
+                  max="220"
+                  step="5"
+                  value="100"
+                  aria-label="Zoom do mapa"
+                />
+                <button id="zoomIn" type="button" aria-label="Aumentar zoom">+</button>
+                <button id="zoomReset" type="button" aria-label="Restaurar zoom">100%</button>
+              </div>
             </div>
           </div>
 

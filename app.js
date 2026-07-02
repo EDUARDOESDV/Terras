@@ -27,10 +27,18 @@ const summaryLotCount = document.querySelector("#summaryLotCount");
 const summaryUsableArea = document.querySelector("#summaryUsableArea");
 const summaryFrontage = document.querySelector("#summaryFrontage");
 const summaryMinArea = document.querySelector("#summaryMinArea");
+const mobileTotalArea = document.querySelector("#mobileTotalArea");
+const mobileLotArea = document.querySelector("#mobileLotArea");
+const zoomRange = document.querySelector("#zoomRange");
+const zoomOut = document.querySelector("#zoomOut");
+const zoomIn = document.querySelector("#zoomIn");
+const zoomReset = document.querySelector("#zoomReset");
+const mapWrap = document.querySelector(".svg-wrap");
 
 const lots = [];
 let selectedLot = null;
 let layout = null;
+let zoomPercent = 100;
 
 const fmt = new Intl.NumberFormat("pt-BR", {
   maximumFractionDigits: 2,
@@ -152,6 +160,14 @@ function updateSummary() {
   summaryUsableArea.textContent = `area util: ${formatArea(land.usableArea)} m2`;
   summaryFrontage.textContent = `${formatMeters(layout.averageFrontage)} m`;
   summaryMinArea.textContent = `minimo: ${formatAreaSmart(layout.minArea)} m2 | media: ${formatArea(layout.averageArea)} m2`;
+  if (mobileTotalArea) mobileTotalArea.textContent = `${formatArea(land.totalArea)} m²`;
+  if (mobileLotArea) mobileLotArea.textContent = `${formatArea(layout.averageArea)} m²`;
+}
+
+function updateZoom(nextZoom) {
+  zoomPercent = Math.max(Number(zoomRange.min), Math.min(Number(zoomRange.max), Math.round(nextZoom)));
+  zoomRange.value = String(zoomPercent);
+  svg.style.width = `${zoomPercent}%`;
 }
 
 function buildLots() {
@@ -396,6 +412,7 @@ function init() {
   buildLots();
   drawBaseMap();
   drawLots();
+  updateZoom(100);
   selectLot("F1-01");
 
   searchButton.addEventListener("click", runSearch);
@@ -412,6 +429,20 @@ function init() {
 
   minAreaInput.addEventListener("input", (event) => onMinAreaChange(event.target.value));
   minAreaRange.addEventListener("input", (event) => onMinAreaChange(event.target.value));
+
+  zoomRange.addEventListener("input", (event) => updateZoom(Number(event.target.value)));
+  zoomOut.addEventListener("click", () => updateZoom(zoomPercent - 10));
+  zoomIn.addEventListener("click", () => updateZoom(zoomPercent + 10));
+  zoomReset.addEventListener("click", () => updateZoom(100));
+
+  mapWrap.addEventListener(
+    "wheel",
+    (event) => {
+      event.preventDefault();
+      updateZoom(zoomPercent + (event.deltaY < 0 ? 10 : -10));
+    },
+    { passive: false },
+  );
 }
 
 init();
