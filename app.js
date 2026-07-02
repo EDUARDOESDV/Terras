@@ -865,7 +865,7 @@ function updateLotClasses() {
 function renderDetails(lot) {
   const maps = mapsUrl(lot.lat, lot.lng);
   const directions = mapsDirectionsUrl(lot.lat, lot.lng);
-  details.innerHTML = `
+  const html = `
     <div>
       <small>Lote selecionado</small>
       <h3>${lot.id} <span class="lot-number">#${lot.number}</span></h3>
@@ -894,6 +894,11 @@ function renderDetails(lot) {
     </div>
     <small>A frente cresce quando o m\u00ednimo sobe. A \u00e1rea total continua sendo preenchida sem sobras.</small>
   `;
+  details.innerHTML = html;
+  const mobileDetails = document.querySelector("#lotDetailsMobile");
+  if (mobileDetails) {
+    mobileDetails.innerHTML = html;
+  }
 }
 
 function selectLot(id, options = {}) {

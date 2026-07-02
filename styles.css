@@ -299,6 +299,10 @@ select:focus {
   padding: 15px;
 }
 
+.details-mobile {
+  display: none;
+}
+
 .details h3 {
   font-size: 1.7rem;
   line-height: 1;
@@ -775,17 +779,26 @@ select:focus {
   }
 
   .svg-wrap {
-    padding: 8px;
+    padding: 4px 4px 6px;
   }
 
   #lotMap {
-    min-height: 320px;
-    max-height: 68vh;
+    min-height: 0;
+    max-height: 52vh;
   }
 
   .real-map {
-    min-height: 320px;
-    max-height: 68vh;
+    min-height: 0;
+    max-height: 52vh;
+  }
+
+  .details-mobile {
+    display: grid;
+    margin-top: -2px;
+  }
+
+  .tools #lotDetails {
+    display: none;
   }
 
   .details {
