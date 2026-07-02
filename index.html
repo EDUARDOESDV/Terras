@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Mapa interativo de loteamento com 330 lotes clicaveis, medidas individuais e link direto para o Google Maps."
+    />
+    <title>Loteamento Interativo - 7 hectares</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Proposta tecnica de divisao</p>
+        <h1>Loteamento interativo de 7 hectares</h1>
+      </div>
+      <a
+        class="maps-link"
+        href="https://www.google.com/maps/@-9.981726,-67.8869668,560m/data=!3m1!1e3?authuser=0&entry=ttu"
+        target="_blank"
+        rel="noreferrer"
+      >
+        Abrir area no Maps
+      </a>
+    </header>
+
+    <main class="shell">
+      <section class="summary" aria-label="Resumo da proposta">
+        <article>
+          <span>Terreno</span>
+          <strong>70.000 m2</strong>
+          <small>168 m frente, 110 m fundo, 503,6 m profundidade</small>
+        </article>
+        <article>
+          <span>Ruas internas</span>
+          <strong>3 x 10 m</strong>
+          <small>ruas longitudinais da frente ao fundo</small>
+        </article>
+        <article>
+          <span>Lotes</span>
+          <strong>330</strong>
+          <small>6 fileiras com 55 lotes cada</small>
+        </article>
+        <article>
+          <span>Medida base</span>
+          <strong>9,16 m</strong>
+          <small>frente de cada lote, profundidade variavel</small>
+        </article>
+      </section>
+
+      <section class="workspace">
+        <aside class="tools" aria-label="Ferramentas do loteamento">
+          <div class="field">
+            <label for="lotSearch">Buscar lote</label>
+            <div class="search-row">
+              <input id="lotSearch" type="search" placeholder="Ex: 124 ou F3-14" autocomplete="off" />
+              <button id="searchButton" type="button">Buscar</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="rowFilter">Filtrar fileira</label>
+            <select id="rowFilter">
+              <option value="all">Todas as fileiras</option>
+              <option value="1">Fileira 1 - externa inferior</option>
+              <option value="2">Fileira 2</option>
+              <option value="3">Fileira 3</option>
+              <option value="4">Fileira 4</option>
+              <option value="5">Fileira 5</option>
+              <option value="6">Fileira 6 - externa superior</option>
+            </select>
+          </div>
+
+          <div id="lotDetails" class="details" aria-live="polite"></div>
+
+          <div class="note">
+            <strong>Estrategia usada</strong>
+            <p>
+              A divisao preserva o terreno inteiro: apenas as 3 ruas de 10 m saem da area util.
+              Como o terreno abre de 110 m para 168 m, a profundidade dos lotes cresce do fundo
+              para a frente, sempre abaixo de 25 m.
+            </p>
+          </div>
+        </aside>
+
+        <section class="map-panel" aria-label="Mapa interativo dos lotes">
+          <div class="map-header">
+            <div>
+              <p class="eyebrow">Clique em qualquer lote</p>
+              <h2>Mapa tecnico com medidas individuais</h2>
+            </div>
+            <div class="legend" aria-label="Legenda">
+              <span><i class="lot-key"></i>Lote</span>
+              <span><i class="road-key"></i>Rua 10 m</span>
+              <span><i class="selected-key"></i>Selecionado</span>
+            </div>
+          </div>
+
+          <div class="svg-wrap">
+            <svg id="lotMap" role="img" aria-label="Mapa interativo com 330 lotes"></svg>
+          </div>
+        </section>
+      </section>
+
+      <section class="references" aria-label="Imagens de referencia">
+        <div class="reference-copy">
+          <p class="eyebrow">Referencia visual</p>
+          <h2>Baseado no contorno informado</h2>
+          <p>
+            As fotos ficam como memoria visual do terreno. O mapa clicavel acima usa as medidas
+            reais informadas para calcular cada lote, rua e coordenada aproximada para demonstracao.
+          </p>
+        </div>
+        <figure>
+          <img src="assets/proposta-loteamento.png" alt="Proposta revisada de loteamento com 330 lotes" />
+          <figcaption>Referencia da divisao em 6 fileiras e 330 lotes.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/referencia-contorno.jpg" alt="Foto do terreno com contorno azul" />
+          <figcaption>Contorno do terreno informado.</figcaption>
+        </figure>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
