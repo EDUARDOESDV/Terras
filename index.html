@@ -38,8 +38,8 @@
         </article>
         <article>
           <span>Ruas</span>
-          <strong>3 x 10 m</strong>
-          <small id="summaryRoadArea">Área das ruas: 15.108 m²</small>
+          <strong id="summaryRoadCount">4 ruas</strong>
+          <small id="summaryRoadArea">Área das ruas: 20.144 m² | 3 horizontais + 1 vertical (centro)</small>
         </article>
         <article>
           <span>Lotes</span>
@@ -49,7 +49,7 @@
         <article>
           <span>Frente mínima</span>
           <strong id="summaryFrontage">10,0 m</strong>
-          <small id="summaryMinArea">Mínimo: 180 m²</small>
+          <small id="summaryMinArea">Mínimo: 250 m²</small>
         </article>
       </section>
 
@@ -60,7 +60,7 @@
         </article>
         <article>
           <span>m² por lote</span>
-          <strong id="mobileLotArea">183,0 m²</strong>
+          <strong id="mobileLotArea">250,0 m²</strong>
         </article>
         <article>
           <span>Lotes</span>
@@ -83,9 +83,9 @@
                 min="120"
                 max="600"
                 step="5"
-                value="180"
+                value="250"
               />
-              <input id="minAreaInput" type="number" min="120" max="600" step="5" value="180" />
+              <input id="minAreaInput" type="number" min="120" max="600" step="5" value="250" />
             </div>
             <small class="field-help">
               Quanto maior o mínimo, menor a quantidade e maior a frente média.
@@ -116,6 +116,30 @@
           </div>
 
           <div class="field">
+            <label for="verticalRoadPositionInput">Rua vertical</label>
+            <select id="verticalRoadPositionInput">
+              <option value="start">Início</option>
+              <option value="center" selected>Centro</option>
+              <option value="end">Fim</option>
+            </select>
+            <small class="field-help">
+              A rua vertical atravessa a planta e pode ficar no início, centro ou fim.
+            </small>
+          </div>
+
+          <div class="field">
+            <div class="toggle-row">
+              <label class="toggle">
+                <input id="highlightEligibleInput" type="checkbox" checked />
+                <span>Destacar lotes que batem o mínimo</span>
+              </label>
+            </div>
+            <small class="field-help">
+              O mapa colore automaticamente os lotes que já atendem a regra global.
+            </small>
+          </div>
+
+          <div class="field">
             <label for="lotSearch">Lote</label>
             <div class="search-row">
               <input id="lotSearch" type="search" placeholder="Ex: 124 ou F3-14" autocomplete="off" />
@@ -127,12 +151,6 @@
             <label for="rowFilter">Fileira</label>
             <select id="rowFilter">
               <option value="all">Todas as fileiras</option>
-              <option value="1">Fileira 1 - externa inferior</option>
-              <option value="2">Fileira 2</option>
-              <option value="3">Fileira 3</option>
-              <option value="4">Fileira 4</option>
-              <option value="5">Fileira 5</option>
-              <option value="6">Fileira 6 - externa superior</option>
             </select>
           </div>
 
@@ -141,9 +159,9 @@
           <div class="note">
             <strong>Método de divisão</strong>
             <p>
-              A malha usa as 3 ruas de 10 m e recalcula a quantidade de lotes por área acumulada,
-              preenchendo toda a área útil sem sobras. Quando o mínimo sobe, a quantidade cai e a
-              frente real muda em toda a planta.
+              A malha usa as 3 ruas horizontais de 10 m e a rua vertical posicionável para
+              recalcular toda a área útil por área acumulada, sem sobras. Quando a regra muda, a
+              planta inteira muda junto.
             </p>
           </div>
         </aside>
@@ -155,6 +173,10 @@
               <h2>Lotes clicaveis com medidas individuais</h2>
             </div>
             <div class="header-tools">
+              <select id="mapViewModeInput" aria-label="Modo do mapa">
+                <option value="simulada" selected>Malha simulada</option>
+                <option value="real">Mapa real</option>
+              </select>
               <div class="legend" aria-label="Legenda">
                 <span><i class="lot-key"></i>Lote</span>
                 <span><i class="road-key"></i>Rua 10 m</span>
@@ -176,31 +198,19 @@
               </div>
             </div>
           </div>
-
           <div class="svg-wrap">
-            <svg id="lotMap" role="img" aria-label="Mapa interativo com 330 lotes"></svg>
+            <svg id="lotMap" role="img" aria-label="Mapa interativo com 210 lotes"></svg>
+            <iframe
+              id="realMap"
+              class="real-map"
+              title="Mapa real do terreno"
+              loading="lazy"
+              hidden
+            ></iframe>
           </div>
         </section>
       </section>
 
-      <section class="references" aria-label="Imagens de referencia">
-        <div class="reference-copy">
-          <p class="eyebrow">Referencia visual</p>
-          <h2>Baseado no contorno informado</h2>
-          <p>
-              As fotos ficam como referência do contorno informado. O desenho interativo usa as
-              medidas do terreno para calcular lotes, ruas e coordenadas aproximadas.
-            </p>
-        </div>
-        <figure>
-          <img src="assets/proposta-loteamento.png" alt="Proposta revisada de loteamento com 330 lotes" />
-          <figcaption>Referencia da divisao em 6 fileiras e 330 lotes.</figcaption>
-        </figure>
-        <figure>
-          <img src="assets/referencia-contorno.jpg" alt="Foto do terreno com contorno azul" />
-          <figcaption>Contorno do terreno informado.</figcaption>
-        </figure>
-      </section>
     </main>
 
     <script src="app.js"></script>
