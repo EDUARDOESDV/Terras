@@ -172,9 +172,9 @@ function drawBaseMap() {
     svg.appendChild(road);
 
     const label = createSvgElement("text", {
-      class: "map-label",
+      class: "road-label",
       x: land.length / 2,
-      y: sy((roadY(index, "bottom", land.length / 2) + roadY(index, "top", land.length / 2)) / 2) + 3,
+      y: sy((roadY(index, "bottom", land.length / 2) + roadY(index, "top", land.length / 2)) / 2) + 1.4,
     });
     label.textContent = `Rua ${index} - 10 m`;
     svg.appendChild(label);
@@ -205,12 +205,12 @@ function drawLots() {
   });
 
   for (let row = 1; row <= land.rows; row += 1) {
-    const x = land.length * 0.54;
+    const x = land.length * 0.58;
     const y = (yFor(row, "bottom", x) + yFor(row, "top", x)) / 2;
     const label = createSvgElement("text", {
-      class: "map-label",
+      class: "row-label",
       x,
-      y: sy(y) + 3,
+      y: sy(y) + 1.6,
     });
     label.textContent = `Fileira ${row}`;
     svg.appendChild(label);
@@ -219,25 +219,25 @@ function drawLots() {
   const depthLabel = createSvgElement("text", {
     class: "axis-label",
     x: land.length / 2,
-    y: land.frontWidth + 14,
+    y: land.frontWidth + 11,
   });
   depthLabel.textContent = "Profundidade 503,6 m";
   svg.appendChild(depthLabel);
 
   const backLabel = createSvgElement("text", {
     class: "axis-label",
-    x: -7,
+    x: -8,
     y: sy(land.backWidth / 2),
-    transform: `rotate(-90 -7 ${sy(land.backWidth / 2)})`,
+    transform: `rotate(-90 -8 ${sy(land.backWidth / 2)})`,
   });
   backLabel.textContent = "Fundo 110 m";
   svg.appendChild(backLabel);
 
   const frontLabel = createSvgElement("text", {
     class: "axis-label",
-    x: land.length + 7,
+    x: land.length + 8,
     y: sy(land.frontWidth / 2),
-    transform: `rotate(90 ${land.length + 7} ${sy(land.frontWidth / 2)})`,
+    transform: `rotate(90 ${land.length + 8} ${sy(land.frontWidth / 2)})`,
   });
   frontLabel.textContent = "Frente 168 m";
   svg.appendChild(frontLabel);
@@ -259,21 +259,21 @@ function renderDetails(lot) {
   details.innerHTML = `
     <div>
       <small>Lote selecionado</small>
-      <h3>${lot.id} <span style="color: var(--muted); font-size: 1rem;">#${lot.number}</span></h3>
+      <h3>${lot.id} <span class="lot-number">#${lot.number}</span></h3>
     </div>
     <div class="detail-grid">
       <div><span>Fileira</span><strong>${lot.row}</strong></div>
-      <div><span>Posicao</span><strong>${lot.col} de ${land.columns}</strong></div>
-      <div><span>Frente</span><strong>${fmt.format(lot.lotWidth)} m</strong></div>
-      <div><span>Profundidade media</span><strong>${fmt.format(lot.depthAvg)} m</strong></div>
+      <div><span>Posicao</span><strong>${lot.col}/${land.columns}</strong></div>
+      <div class="metric-primary"><span>Frente</span><strong>${fmt.format(lot.lotWidth)} m</strong></div>
+      <div class="metric-primary"><span>Prof. media</span><strong>${fmt.format(lot.depthAvg)} m</strong></div>
       <div><span>Profundidade no inicio</span><strong>${fmt.format(lot.depthStart)} m</strong></div>
       <div><span>Profundidade no fim</span><strong>${fmt.format(lot.depthEnd)} m</strong></div>
-      <div><span>Area estimada</span><strong>${fmt.format(lot.area)} m2</strong></div>
+      <div class="metric-primary"><span>Area estimada</span><strong>${fmt.format(lot.area)} m2</strong></div>
       <div><span>Coordenada</span><strong>${lot.lat.toFixed(5)}, ${lot.lng.toFixed(5)}</strong></div>
     </div>
     <div class="detail-actions">
       <a href="${maps}" target="_blank" rel="noreferrer">Ver este lote no Google Maps</a>
-      <a href="${directions}" target="_blank" rel="noreferrer">Traçar rota ate o lote</a>
+      <a href="${directions}" target="_blank" rel="noreferrer">Tracar rota ate o lote</a>
     </div>
     <small>Coordenada aproximada para demonstracao, calculada a partir do centro do terreno informado.</small>
   `;

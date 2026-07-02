@@ -10,7 +10,7 @@
   --yellow: #f3c623;
   --road: #d7d9d6;
   --blue: #1c64f2;
-  --shadow: 0 20px 60px rgba(30, 45, 38, 0.12);
+  --shadow: 0 16px 44px rgba(30, 45, 38, 0.1);
 }
 
 * {
@@ -19,7 +19,7 @@
 
 body {
   margin: 0;
-  background: linear-gradient(180deg, #eef5ee 0%, #fbfcf8 42%);
+  background: linear-gradient(180deg, #eef5ee 0%, #f8fbf7 52%, #fbfcf8 100%);
   color: var(--ink);
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -32,11 +32,11 @@ select {
 }
 
 .topbar {
-  align-items: center;
+  align-items: end;
   display: flex;
   gap: 24px;
   justify-content: space-between;
-  padding: 28px clamp(18px, 4vw, 56px) 18px;
+  padding: 26px clamp(18px, 4vw, 56px) 16px;
 }
 
 .eyebrow {
@@ -55,16 +55,24 @@ p {
 }
 
 h1 {
-  font-size: clamp(1.8rem, 4vw, 3.9rem);
-  line-height: 1;
-  margin-bottom: 0;
-  max-width: 790px;
+  font-size: clamp(2rem, 4.2vw, 4.2rem);
+  line-height: 0.98;
+  margin-bottom: 10px;
+  max-width: 900px;
 }
 
 h2 {
-  font-size: clamp(1.16rem, 2vw, 1.55rem);
+  font-size: clamp(1.1rem, 1.8vw, 1.42rem);
   line-height: 1.15;
   margin-bottom: 0;
+}
+
+.intro {
+  color: var(--muted);
+  font-size: clamp(0.98rem, 1.4vw, 1.15rem);
+  line-height: 1.45;
+  margin: 0;
+  max-width: 620px;
 }
 
 .maps-link,
@@ -78,8 +86,8 @@ button {
   display: inline-flex;
   font-weight: 800;
   justify-content: center;
-  min-height: 42px;
-  padding: 0 16px;
+  min-height: 44px;
+  padding: 0 18px;
   text-decoration: none;
   transition:
     transform 160ms ease,
@@ -95,13 +103,13 @@ button:hover {
 
 .shell {
   display: grid;
-  gap: 22px;
+  gap: 20px;
   padding: 0 clamp(18px, 4vw, 56px) 48px;
 }
 
 .summary {
   display: grid;
-  gap: 12px;
+  gap: 10px;
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
@@ -117,7 +125,7 @@ button:hover {
 
 .summary article {
   border-radius: 8px;
-  padding: 16px;
+  padding: 15px 16px;
 }
 
 .summary span,
@@ -134,7 +142,7 @@ button:hover {
 
 .summary strong {
   display: block;
-  font-size: clamp(1.45rem, 3vw, 2.45rem);
+  font-size: clamp(1.35rem, 2.6vw, 2.2rem);
   line-height: 1.05;
   margin: 4px 0;
 }
@@ -147,8 +155,8 @@ button:hover {
 .workspace {
   align-items: start;
   display: grid;
-  gap: 18px;
-  grid-template-columns: minmax(300px, 360px) minmax(0, 1fr);
+  gap: 16px;
+  grid-template-columns: minmax(310px, 380px) minmax(0, 1fr);
 }
 
 .tools,
@@ -158,10 +166,10 @@ button:hover {
 
 .tools {
   display: grid;
-  gap: 18px;
-  padding: 18px;
+  gap: 16px;
+  padding: 16px;
   position: sticky;
-  top: 16px;
+  top: 12px;
 }
 
 .field {
@@ -170,7 +178,8 @@ button:hover {
 }
 
 label {
-  font-size: 0.82rem;
+  color: #27352d;
+  font-size: 0.8rem;
   font-weight: 900;
 }
 
@@ -186,7 +195,7 @@ select {
   border: 1px solid var(--line);
   border-radius: 8px;
   color: var(--ink);
-  min-height: 42px;
+  min-height: 44px;
   padding: 0 12px;
   width: 100%;
 }
@@ -201,20 +210,26 @@ select:focus {
   border: 1px solid var(--line);
   border-radius: 8px;
   display: grid;
-  gap: 14px;
-  min-height: 260px;
-  padding: 16px;
+  gap: 13px;
+  min-height: 250px;
+  padding: 15px;
 }
 
 .details h3 {
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   line-height: 1;
   margin: 0;
 }
 
+.lot-number {
+  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
 .detail-grid {
   display: grid;
-  gap: 10px;
+  gap: 8px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
@@ -222,19 +237,33 @@ select:focus {
   background: #f5f8f4;
   border: 1px solid #e5ece7;
   border-radius: 8px;
-  padding: 10px;
+  min-width: 0;
+  padding: 10px 11px;
+}
+
+.detail-grid .metric-primary {
+  background: #edf7f1;
+  border-color: rgba(46, 138, 101, 0.26);
 }
 
 .detail-grid span {
   color: var(--muted);
   display: block;
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 800;
   margin-bottom: 3px;
 }
 
 .detail-grid strong {
-  font-size: 1.03rem;
+  display: block;
+  font-size: 0.98rem;
+  line-height: 1.22;
+  overflow-wrap: anywhere;
+}
+
+.metric-primary strong {
+  color: var(--green);
+  font-size: 1.06rem;
 }
 
 .detail-actions {
@@ -247,7 +276,7 @@ select:focus {
   color: #fff;
   display: block;
   font-weight: 900;
-  padding: 12px 14px;
+  padding: 11px 14px;
   text-align: center;
   text-decoration: none;
 }
@@ -263,7 +292,7 @@ select:focus {
 .note {
   border-radius: 8px;
   box-shadow: none;
-  padding: 14px;
+  padding: 13px;
 }
 
 .note strong {
@@ -273,7 +302,8 @@ select:focus {
 
 .note p {
   color: var(--muted);
-  line-height: 1.5;
+  font-size: 0.92rem;
+  line-height: 1.45;
   margin-bottom: 0;
 }
 
@@ -287,7 +317,7 @@ select:focus {
   display: flex;
   gap: 18px;
   justify-content: space-between;
-  padding: 18px 18px 10px;
+  padding: 16px 18px 12px;
 }
 
 .legend {
@@ -301,7 +331,7 @@ select:focus {
   align-items: center;
   color: var(--muted);
   display: inline-flex;
-  font-size: 0.83rem;
+  font-size: 0.78rem;
   font-weight: 800;
   gap: 6px;
 }
@@ -309,8 +339,8 @@ select:focus {
 .legend i {
   border-radius: 3px;
   display: block;
-  height: 14px;
-  width: 22px;
+  height: 12px;
+  width: 20px;
 }
 
 .lot-key {
@@ -330,25 +360,28 @@ select:focus {
 
 .svg-wrap {
   background:
-    linear-gradient(rgba(17, 31, 22, 0.18), rgba(17, 31, 22, 0.18)),
+    linear-gradient(rgba(12, 24, 18, 0.2), rgba(12, 24, 18, 0.2)),
     url("assets/referencia-satelite.jpg") center / cover;
   border-top: 1px solid var(--line);
   overflow: auto;
-  padding: 18px;
+  padding: 16px;
 }
 
 #lotMap {
   display: block;
-  min-height: 440px;
+  aspect-ratio: 503.6 / 182;
+  height: auto;
+  max-height: 72vh;
+  min-height: 360px;
   min-width: 820px;
   width: 100%;
 }
 
 .lot {
   cursor: pointer;
-  fill: rgba(243, 198, 35, 0.2);
-  stroke: rgba(243, 198, 35, 0.95);
-  stroke-width: 0.42;
+  fill: rgba(243, 198, 35, 0.17);
+  stroke: rgba(248, 213, 54, 0.96);
+  stroke-width: 0.36;
   transition:
     fill 120ms ease,
     stroke-width 120ms ease;
@@ -356,7 +389,8 @@ select:focus {
 
 .lot:hover {
   fill: rgba(243, 198, 35, 0.42);
-  stroke-width: 1.2;
+  stroke: #fff3a0;
+  stroke-width: 0.95;
 }
 
 .lot.is-muted {
@@ -365,50 +399,68 @@ select:focus {
 }
 
 .lot.is-selected {
-  fill: rgba(28, 100, 242, 0.3);
+  fill: rgba(28, 100, 242, 0.38);
   stroke: var(--blue);
-  stroke-width: 2.4;
+  stroke-width: 1.65;
 }
 
 .road {
-  fill: rgba(215, 217, 214, 0.9);
+  fill: rgba(231, 234, 230, 0.92);
   stroke: rgba(120, 130, 122, 0.9);
-  stroke-width: 0.55;
+  stroke-width: 0.42;
 }
 
 .boundary {
-  fill: rgba(29, 107, 79, 0.13);
+  fill: rgba(29, 107, 79, 0.1);
   stroke: var(--blue);
   stroke-linejoin: round;
-  stroke-width: 2.8;
+  stroke-width: 1.45;
 }
 
 .map-label {
   fill: #fff;
-  font-size: 11px;
+  font-size: 5.2px;
   font-weight: 900;
   paint-order: stroke;
-  stroke: rgba(0, 0, 0, 0.55);
-  stroke-width: 3px;
+  stroke: rgba(10, 16, 13, 0.68);
+  stroke-width: 1.35px;
   text-anchor: middle;
 }
 
 .axis-label {
   fill: #fff;
-  font-size: 10px;
+  font-size: 5px;
   font-weight: 900;
   paint-order: stroke;
-  stroke: rgba(0, 0, 0, 0.55);
-  stroke-width: 2.4px;
+  stroke: rgba(10, 16, 13, 0.68);
+  stroke-width: 1.35px;
+  text-anchor: middle;
+}
+
+.road-label {
+  fill: #17211b;
+  font-size: 4.3px;
+  font-weight: 900;
+  text-anchor: middle;
+}
+
+.row-label {
+  fill: #fff;
+  font-size: 4.8px;
+  font-weight: 900;
+  opacity: 0.95;
+  paint-order: stroke;
+  stroke: rgba(10, 16, 13, 0.68);
+  stroke-width: 1.2px;
   text-anchor: middle;
 }
 
 .references {
   border-radius: 8px;
   display: grid;
-  gap: 18px;
+  gap: 16px;
   grid-template-columns: 0.9fr 1.25fr 0.85fr;
-  padding: 18px;
+  padding: 16px;
 }
 
 .reference-copy {
@@ -460,6 +512,10 @@ figcaption {
   .tools {
     position: static;
   }
+
+  #lotMap {
+    max-height: none;
+  }
 }
 
 @media (max-width: 620px) {
@@ -485,5 +541,10 @@ figcaption {
 
   .svg-wrap {
     padding: 10px;
+  }
+
+  #lotMap {
+    min-height: 300px;
+    min-width: 760px;
   }
 }

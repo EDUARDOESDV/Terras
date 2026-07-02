@@ -13,8 +13,11 @@
   <body>
     <header class="topbar">
       <div>
-        <p class="eyebrow">Proposta tecnica de divisao</p>
-        <h1>Loteamento interativo de 7 hectares</h1>
+        <p class="eyebrow">Proposta tecnica</p>
+        <h1>Mapa interativo do loteamento</h1>
+        <p class="intro">
+          Consulte cada lote, compare medidas e abra a localizacao aproximada no Google Maps.
+        </p>
       </div>
       <a
         class="maps-link"
@@ -22,19 +25,19 @@
         target="_blank"
         rel="noreferrer"
       >
-        Abrir area no Maps
+        Area no Maps
       </a>
     </header>
 
     <main class="shell">
       <section class="summary" aria-label="Resumo da proposta">
         <article>
-          <span>Terreno</span>
+          <span>Area do terreno</span>
           <strong>70.000 m2</strong>
           <small>168 m frente, 110 m fundo, 503,6 m profundidade</small>
         </article>
         <article>
-          <span>Ruas internas</span>
+          <span>Ruas</span>
           <strong>3 x 10 m</strong>
           <small>ruas longitudinais da frente ao fundo</small>
         </article>
@@ -44,16 +47,16 @@
           <small>6 fileiras com 55 lotes cada</small>
         </article>
         <article>
-          <span>Medida base</span>
+          <span>Frente do lote</span>
           <strong>9,16 m</strong>
-          <small>frente de cada lote, profundidade variavel</small>
+          <small>profundidade ajustada ao trapezio</small>
         </article>
       </section>
 
       <section class="workspace">
         <aside class="tools" aria-label="Ferramentas do loteamento">
           <div class="field">
-            <label for="lotSearch">Buscar lote</label>
+            <label for="lotSearch">Lote</label>
             <div class="search-row">
               <input id="lotSearch" type="search" placeholder="Ex: 124 ou F3-14" autocomplete="off" />
               <button id="searchButton" type="button">Buscar</button>
@@ -61,7 +64,7 @@
           </div>
 
           <div class="field">
-            <label for="rowFilter">Filtrar fileira</label>
+            <label for="rowFilter">Fileira</label>
             <select id="rowFilter">
               <option value="all">Todas as fileiras</option>
               <option value="1">Fileira 1 - externa inferior</option>
@@ -76,11 +79,11 @@
           <div id="lotDetails" class="details" aria-live="polite"></div>
 
           <div class="note">
-            <strong>Estrategia usada</strong>
+            <strong>Metodo de divisao</strong>
             <p>
-              A divisao preserva o terreno inteiro: apenas as 3 ruas de 10 m saem da area util.
-              Como o terreno abre de 110 m para 168 m, a profundidade dos lotes cresce do fundo
-              para a frente, sempre abaixo de 25 m.
+              O terreno foi dividido em 6 faixas de lotes e 3 ruas de 10 m. Como a frente e mais
+              larga que o fundo, a profundidade de cada lote varia por posicao para aproveitar a
+              area sem sobras no desenho.
             </p>
           </div>
         </aside>
@@ -88,8 +91,8 @@
         <section class="map-panel" aria-label="Mapa interativo dos lotes">
           <div class="map-header">
             <div>
-              <p class="eyebrow">Clique em qualquer lote</p>
-              <h2>Mapa tecnico com medidas individuais</h2>
+              <p class="eyebrow">Mapa tecnico</p>
+              <h2>Lotes clicaveis com medidas individuais</h2>
             </div>
             <div class="legend" aria-label="Legenda">
               <span><i class="lot-key"></i>Lote</span>
@@ -109,8 +112,8 @@
           <p class="eyebrow">Referencia visual</p>
           <h2>Baseado no contorno informado</h2>
           <p>
-            As fotos ficam como memoria visual do terreno. O mapa clicavel acima usa as medidas
-            reais informadas para calcular cada lote, rua e coordenada aproximada para demonstracao.
+            As fotos ficam como referencia do contorno informado. O desenho interativo usa as
+            medidas do terreno para calcular lotes, ruas e coordenadas aproximadas.
           </p>
         </div>
         <figure>
