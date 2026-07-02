@@ -610,6 +610,36 @@ figcaption {
 }
 
 @media (max-width: 959px) {
+  .topbar {
+    background: rgba(251, 252, 248, 0.94);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(217, 225, 220, 0.9);
+    box-shadow: 0 10px 30px rgba(30, 45, 38, 0.08);
+    gap: 8px;
+    padding: 10px 14px 10px;
+  }
+
+  .maps-link {
+    align-self: flex-start;
+    min-height: 40px;
+    padding: 0 14px;
+    width: fit-content;
+  }
+
+  .intro {
+    display: none;
+  }
+
+  h1 {
+    font-size: clamp(1.45rem, 5.8vw, 1.9rem);
+    line-height: 1.05;
+    margin-bottom: 4px;
+  }
+
+  .eyebrow {
+    margin-bottom: 4px;
+  }
+
   .summary {
     display: none;
   }
@@ -620,7 +650,7 @@ figcaption {
   }
 
   .map-panel {
-    order: 0;
+    order: -1;
   }
 
   .tools {
@@ -631,27 +661,90 @@ figcaption {
   }
 
   #lotDetails {
-    order: 0;
-  }
-
-  .field:nth-of-type(1) {
-    order: 1;
-  }
-
-  .field:nth-of-type(2) {
-    order: 2;
-  }
-
-  .field:nth-of-type(3) {
-    order: 3;
+    order: -1;
   }
 
   .note {
-    order: 4;
+    order: 2;
   }
 
   .mobile-stats {
     display: grid;
+    background: rgba(251, 252, 248, 0.84);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(217, 225, 220, 0.9);
+    border-radius: 12px;
+    box-shadow: 0 14px 28px rgba(30, 45, 38, 0.08);
+    gap: 5px;
+    margin-bottom: 6px;
+    padding: 6px;
+    position: sticky;
+    top: 10px;
+    z-index: 40;
+  }
+
+  .mobile-stats article {
+    padding: 8px 9px 8px;
+  }
+
+  .mobile-stats strong {
+    font-size: clamp(1.06rem, 5.7vw, 1.45rem);
+  }
+
+  .mobile-stats span {
+    font-size: 0.66rem;
+  }
+
+  .map-header {
+    gap: 6px;
+    padding: 8px 12px 8px;
+  }
+
+  .map-header h2 {
+    display: none;
+  }
+
+  .header-tools {
+    gap: 6px;
+  }
+
+  .legend {
+    gap: 8px;
+  }
+
+  .zoombar {
+    gap: 6px;
+    grid-template-columns: 38px minmax(0, 1fr) 38px 54px;
+  }
+
+  .zoombar button {
+    min-height: 36px;
+  }
+
+  .svg-wrap {
+    padding: 8px;
+  }
+
+  #lotMap {
+    min-height: 260px;
+    max-height: 48vh;
+  }
+
+  .details {
+    min-height: auto;
+    padding: 12px;
+  }
+
+  .details h3 {
+    font-size: 1.35rem;
+  }
+
+  .lot-number {
+    font-size: 0.88rem;
+  }
+
+  .detail-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 

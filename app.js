@@ -20,6 +20,8 @@ const searchButton = document.querySelector("#searchButton");
 const rowFilter = document.querySelector("#rowFilter");
 const minAreaInput = document.querySelector("#minAreaInput");
 const minAreaRange = document.querySelector("#minAreaRange");
+const minFrontageInput = document.querySelector("#minFrontageInput");
+const minFrontageRange = document.querySelector("#minFrontageRange");
 
 const summaryTotalArea = document.querySelector("#summaryTotalArea");
 const summaryRoadArea = document.querySelector("#summaryRoadArea");
@@ -29,6 +31,8 @@ const summaryFrontage = document.querySelector("#summaryFrontage");
 const summaryMinArea = document.querySelector("#summaryMinArea");
 const mobileTotalArea = document.querySelector("#mobileTotalArea");
 const mobileLotArea = document.querySelector("#mobileLotArea");
+const mobileLotCount = document.querySelector("#mobileLotCount");
+const mobileFrontage = document.querySelector("#mobileFrontage");
 const zoomRange = document.querySelector("#zoomRange");
 const zoomOut = document.querySelector("#zoomOut");
 const zoomIn = document.querySelector("#zoomIn");
@@ -64,15 +68,19 @@ function formatAreaSmart(value) {
   return Number.isInteger(value) ? formatNumber(value, 0) : formatArea(value);
 }
 
-function computeLayout(minArea) {
+function computeLayout(minArea, minFrontage) {
   const target = Number(minArea);
-  const columns = Math.max(1, Math.floor(land.usableArea / (land.rows * target)));
+  const frontageTarget = Number(minFrontage);
+  const maxColumnsByArea = land.usableArea / (land.rows * target);
+  const maxColumnsByFrontage = land.length / frontageTarget;
+  const columns = Math.max(1, Math.floor(Math.min(maxColumnsByArea, maxColumnsByFrontage)));
   const totalLots = land.rows * columns;
   const averageArea = land.usableArea / totalLots;
   const averageFrontage = land.length / columns;
 
   return {
     minArea: target,
+    minFrontage: frontageTarget,
     columns,
     totalLots,
     averageArea,
@@ -153,15 +161,24 @@ function syncMinArea(value) {
   return Number(normalized);
 }
 
+function syncMinFrontage(value) {
+  const normalized = String(Math.max(10, Math.min(24, Number(value))));
+  minFrontageInput.value = normalized;
+  minFrontageRange.value = normalized;
+  return Number(normalized);
+}
+
 function updateSummary() {
-  summaryTotalArea.textContent = `${formatArea(land.totalArea)} m2`;
-  summaryRoadArea.textContent = `area das ruas: ${formatAreaSmart(land.roadArea)} m2`;
+  summaryTotalArea.textContent = `${formatArea(land.totalArea)} m²`;
+  summaryRoadArea.textContent = `Área das ruas: ${formatAreaSmart(land.roadArea)} m²`;
   summaryLotCount.textContent = String(layout.totalLots);
-  summaryUsableArea.textContent = `area util: ${formatArea(land.usableArea)} m2`;
-  summaryFrontage.textContent = `${formatMeters(layout.averageFrontage)} m`;
-  summaryMinArea.textContent = `minimo: ${formatAreaSmart(layout.minArea)} m2 | media: ${formatArea(layout.averageArea)} m2`;
+  summaryUsableArea.textContent = `Área útil: ${formatArea(land.usableArea)} m²`;
+  summaryFrontage.textContent = `${formatMeters(layout.minFrontage)} m`;
+  summaryMinArea.textContent = `Mínimo: ${formatAreaSmart(layout.minArea)} m² | Média: ${formatArea(layout.averageArea)} m²`;
   if (mobileTotalArea) mobileTotalArea.textContent = `${formatArea(land.totalArea)} m²`;
   if (mobileLotArea) mobileLotArea.textContent = `${formatArea(layout.averageArea)} m²`;
+  if (mobileLotCount) mobileLotCount.textContent = String(layout.totalLots);
+  if (mobileFrontage) mobileFrontage.textContent = `${formatMeters(layout.minFrontage)} m`;
 }
 
 function updateZoom(nextZoom) {
@@ -342,7 +359,7 @@ function renderDetails(lot) {
     <div>
       <small>Lote selecionado</small>
       <h3>${lot.id} <span class="lot-number">#${lot.number}</span></h3>
-      <small>Malha atual: ${layout.totalLots} lotes | media: ${formatArea(layout.averageArea)} m2</small>
+      <small>Malha atual: ${layout.totalLots} lotes | média: ${formatArea(layout.averageArea)} m²</small>
     </div>
     <div class="detail-grid">
       <div><span>Fileira</span><strong>${lot.row}</strong></div>
@@ -351,7 +368,7 @@ function renderDetails(lot) {
       <div class="metric-primary"><span>Prof. media</span><strong>${formatMeters(lot.depthAvg)} m</strong></div>
       <div><span>Profundidade no inicio</span><strong>${formatMeters(lot.depthStart)} m</strong></div>
       <div><span>Profundidade no fim</span><strong>${formatMeters(lot.depthEnd)} m</strong></div>
-      <div class="metric-primary"><span>Area estimada</span><strong>${formatArea(lot.area)} m2</strong></div>
+      <div class="metric-primary"><span>Área estimada</span><strong>${formatArea(lot.area)} m²</strong></div>
       <div><span>Coordenada</span><strong>${lot.lat.toFixed(5)}, ${lot.lng.toFixed(5)}</strong></div>
     </div>
     <div class="detail-actions">
@@ -389,7 +406,7 @@ function normalizeSearch(value) {
 
 function rebuildLayout(minArea, keepSelection = true) {
   const previousId = keepSelection ? selectedLot?.id : null;
-  layout = computeLayout(minArea);
+  layout = computeLayout(minArea, layout?.minFrontage ?? 10);
   updateSummary();
   buildLots();
   drawBaseMap();
@@ -407,7 +424,8 @@ function runSearch() {
 
 function init() {
   const minArea = syncMinArea(minAreaInput.value);
-  layout = computeLayout(minArea);
+  const minFrontage = syncMinFrontage(minFrontageInput.value);
+  layout = computeLayout(minArea, minFrontage);
   updateSummary();
   buildLots();
   drawBaseMap();
@@ -427,8 +445,21 @@ function init() {
     rebuildLayout(nextValue);
   };
 
+  const onMinFrontageChange = (value) => {
+    const nextValue = syncMinFrontage(value);
+    layout = computeLayout(layout.minArea, nextValue);
+    updateSummary();
+    buildLots();
+    drawBaseMap();
+    drawLots();
+    updateLotClasses();
+    selectLot(selectedLot?.id ?? "F1-01");
+  };
+
   minAreaInput.addEventListener("input", (event) => onMinAreaChange(event.target.value));
   minAreaRange.addEventListener("input", (event) => onMinAreaChange(event.target.value));
+  minFrontageInput.addEventListener("input", (event) => onMinFrontageChange(event.target.value));
+  minFrontageRange.addEventListener("input", (event) => onMinFrontageChange(event.target.value));
 
   zoomRange.addEventListener("input", (event) => updateZoom(Number(event.target.value)));
   zoomOut.addEventListener("click", () => updateZoom(zoomPercent - 10));
