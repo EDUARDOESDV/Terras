@@ -1,7 +1,9 @@
 const land = {
-  backWidth: 110,
-  frontWidth: 168,
-  length: 503.6,
+  backWidth: 113,
+  frontWidth: 161,
+  length: 400,
+  sideUpper: 412,
+  sideLower: 451,
   horizontalRoads: 3,
   horizontalRoadWidth: 10,
   verticalRoadWidth: 10,
@@ -823,7 +825,7 @@ function drawLots() {
     x: depthPoint.x,
     y: depthPoint.y,
   });
-  depthLabel.textContent = "Profundidade 503,6 m";
+  depthLabel.textContent = "Profundidade 400 m";
   svg.appendChild(depthLabel);
 
   const backPoint = screenFromLocal(-8, land.backWidth / 2);
@@ -833,7 +835,7 @@ function drawLots() {
     y: backPoint.y,
     transform: `rotate(-90 ${backPoint.x} ${backPoint.y})`,
   });
-  backLabel.textContent = "Fundo 110 m";
+  backLabel.textContent = "Fundo 113 m";
   svg.appendChild(backLabel);
 
   const frontPoint = screenFromLocal(land.length + 8, land.frontWidth / 2);
@@ -843,7 +845,7 @@ function drawLots() {
     y: frontPoint.y,
     transform: `rotate(90 ${frontPoint.x} ${frontPoint.y})`,
   });
-  frontLabel.textContent = "Frente 168 m";
+  frontLabel.textContent = "Frente 161 m";
   svg.appendChild(frontLabel);
 }
 
