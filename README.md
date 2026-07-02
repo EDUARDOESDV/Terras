@@ -24,12 +24,12 @@ As coordenadas dos lotes sao aproximadas para demonstracao. Para uso oficial, a 
 
 ## Rodar localmente
 
-Abra `index.html` no navegador ou use um servidor estatico:
+Abra `index.html` no navegador ou use qualquer servidor estatico:
 
 ```bash
-npm run dev
+npx serve .
 ```
 
 ## Deploy na Vercel
 
-O projeto e estatico. A Vercel pode publicar direto da raiz do repositorio.
+O projeto e estatico. A Vercel publica direto da raiz do repositorio usando `vercel.json`.

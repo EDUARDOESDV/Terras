@@ -4,7 +4,6 @@
   "private": true,
   "description": "Site estatico para demonstracao de loteamento interativo.",
   "scripts": {
-    "dev": "node server.mjs",
-    "check": "node -e \"const fs=require('fs'); ['index.html','styles.css','app.js','server.mjs'].forEach(f=>{ if(!fs.existsSync(f)) throw new Error(f+' nao encontrado') }); console.log('Arquivos principais encontrados')\""
+    "check": "node -e \"const fs=require('fs'); ['index.html','styles.css','app.js','vercel.json'].forEach(f=>{ if(!fs.existsSync(f)) throw new Error(f+' nao encontrado') }); console.log('Arquivos principais encontrados')\""
   }
 }
