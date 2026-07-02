@@ -68,23 +68,78 @@ function formatAreaSmart(value) {
   return Number.isInteger(value) ? formatNumber(value, 0) : formatArea(value);
 }
 
+function rowAreaPrefix(x) {
+  const roadBand = land.roads * land.roadWidth;
+  const linear = (land.backWidth - roadBand) / land.rows;
+  const quadratic = (land.frontWidth - land.backWidth) / (land.rows * land.length);
+  return linear * x + 0.5 * quadratic * x * x;
+}
+
+function xForRowArea(area) {
+  const roadBand = land.roads * land.roadWidth;
+  const linear = (land.backWidth - roadBand) / land.rows;
+  const quadratic = (land.frontWidth - land.backWidth) / (land.rows * land.length);
+  if (Math.abs(quadratic) < 1e-12) {
+    return area / linear;
+  }
+  return (-linear + Math.sqrt((linear * linear) + (2 * quadratic * area))) / quadratic;
+}
+
+function buildColumnBounds(columns) {
+  const rowArea = land.usableArea / land.rows;
+  const targetArea = rowArea / columns;
+  const bounds = [0];
+
+  for (let index = 1; index < columns; index += 1) {
+    bounds.push(xForRowArea(targetArea * index));
+  }
+
+  bounds.push(land.length);
+  return { bounds, targetArea };
+}
+
 function computeLayout(minArea, minFrontage) {
   const target = Number(minArea);
   const frontageTarget = Number(minFrontage);
-  const maxColumnsByArea = land.usableArea / (land.rows * target);
-  const maxColumnsByFrontage = land.length / frontageTarget;
-  const columns = Math.max(1, Math.floor(Math.min(maxColumnsByArea, maxColumnsByFrontage)));
-  const totalLots = land.rows * columns;
-  const averageArea = land.usableArea / totalLots;
-  const averageFrontage = land.length / columns;
+  const rowArea = land.usableArea / land.rows;
+  const maxColumnsByArea = Math.max(1, Math.floor(rowArea / target));
+  const maxColumnsByFrontage = Math.max(1, Math.floor(land.length / frontageTarget));
+
+  let columns = 1;
+  let bounds = [0, land.length];
+  let targetArea = rowArea;
+  let averageFrontage = land.length;
+  let minFrontageActual = land.length;
+  let maxFrontageActual = land.length;
+
+  for (let candidate = Math.min(maxColumnsByArea, maxColumnsByFrontage); candidate >= 1; candidate -= 1) {
+    const next = buildColumnBounds(candidate);
+    const widths = next.bounds.slice(1).map((value, index) => value - next.bounds[index]);
+    const tooNarrow = widths.some((width) => width + 1e-6 < frontageTarget);
+
+    if (!tooNarrow) {
+      columns = candidate;
+      bounds = next.bounds;
+      targetArea = next.targetArea;
+      averageFrontage = land.length / columns;
+      minFrontageActual = Math.min(...widths);
+      maxFrontageActual = Math.max(...widths);
+      break;
+    }
+  }
 
   return {
     minArea: target,
     minFrontage: frontageTarget,
     columns,
-    totalLots,
-    averageArea,
+    totalLots: land.rows * columns,
+    averageArea: targetArea,
     averageFrontage,
+    minFrontageActual,
+    maxFrontageActual,
+    columnBounds: bounds,
+    columnAreas: Array.from({ length: columns }, () => targetArea),
+    columnWidths: bounds.slice(1).map((value, index) => value - bounds[index]),
   };
 }
 
@@ -173,8 +228,8 @@ function updateSummary() {
   summaryRoadArea.textContent = `Área das ruas: ${formatAreaSmart(land.roadArea)} m²`;
   summaryLotCount.textContent = String(layout.totalLots);
   summaryUsableArea.textContent = `Área útil: ${formatArea(land.usableArea)} m²`;
-  summaryFrontage.textContent = `${formatMeters(layout.minFrontage)} m`;
-  summaryMinArea.textContent = `Mínimo: ${formatAreaSmart(layout.minArea)} m² | Média: ${formatArea(layout.averageArea)} m²`;
+  summaryFrontage.textContent = `${formatMeters(layout.minFrontage)} m | real ${formatMeters(layout.minFrontageActual)}-${formatMeters(layout.maxFrontageActual)} m`;
+  summaryMinArea.textContent = `Mínimo definido: ${formatAreaSmart(layout.minArea)} m² | Lote calculado: ${formatArea(layout.averageArea)} m²`;
   if (mobileTotalArea) mobileTotalArea.textContent = `${formatArea(land.totalArea)} m²`;
   if (mobileLotArea) mobileLotArea.textContent = `${formatArea(layout.averageArea)} m²`;
   if (mobileLotCount) mobileLotCount.textContent = String(layout.totalLots);
@@ -189,13 +244,12 @@ function updateZoom(nextZoom) {
 
 function buildLots() {
   lots.length = 0;
-  const lotWidth = land.length / layout.columns;
   let number = 1;
 
   for (let row = 1; row <= land.rows; row += 1) {
     for (let col = 1; col <= layout.columns; col += 1) {
-      const x0 = (col - 1) * lotWidth;
-      const x1 = col * lotWidth;
+      const x0 = layout.columnBounds[col - 1];
+      const x1 = layout.columnBounds[col];
       const y0x0 = yFor(row, "bottom", x0);
       const y0x1 = yFor(row, "bottom", x1);
       const y1x1 = yFor(row, "top", x1);
@@ -213,7 +267,7 @@ function buildLots() {
         x1,
         centerX,
         centerY,
-        lotWidth,
+        lotWidth: x1 - x0,
         depthStart: y1x0 - y0x0,
         depthEnd: y1x1 - y0x1,
         depthAvg: rowHeightAt(centerX),
@@ -359,7 +413,7 @@ function renderDetails(lot) {
     <div>
       <small>Lote selecionado</small>
       <h3>${lot.id} <span class="lot-number">#${lot.number}</span></h3>
-      <small>Malha atual: ${layout.totalLots} lotes | média: ${formatArea(layout.averageArea)} m²</small>
+      <small>Malha global: ${layout.totalLots} lotes | lote calculado: ${formatArea(layout.averageArea)} m²</small>
     </div>
     <div class="detail-grid">
       <div><span>Fileira</span><strong>${lot.row}</strong></div>
